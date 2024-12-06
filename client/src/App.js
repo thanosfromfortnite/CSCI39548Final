@@ -1,34 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
 import React, {useEffect, useState} from 'react';
-
-function callApi() {
-	
-}
+import Graph from './components/Graph';
 
 function App() {
-	
-	this.state = {texty: "hello"};
-	
+  const [testy, setTesty] = useState([]);
+  
+  useEffect(() => {
+	fetch('http://localhost:3001/pricehistory/Abyssal whip')
+	.then((response) => {
+		return response.json();
+	})
+	.then((data) => {
+		setTesty(data);
+	})
+	.catch(e => console.error(e));
+  }, []);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-		<button onClick={callApi(this)}>
-			{this.state.texty}
-		</button>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+	<div className="App">
+      <Graph datas={{timestamps: testy.timestamps,
+	  prices: testy.prices,
+	  volumes: testy.volumes}} />
     </div>
   );
 }
