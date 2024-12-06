@@ -67,6 +67,7 @@ app.get('/pricehistory/:name', (req, res) => {
 		else {
 			res.status(200);
 			let out = {
+				name: req.params.name,
 				timestamps: [],
 				prices: [],
 				volumes: []

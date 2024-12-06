@@ -19,9 +19,13 @@ function App() {
   
   return (
 	<div className="App">
-      <Graph datas={{timestamps: testy.timestamps,
-	  prices: testy.prices,
-	  volumes: testy.volumes}} />
+      <Graph datas={{
+		  name: testy.name,
+		  timestamps: testy.timestamps,
+		  prices: testy.prices,
+		  volumes: testy.volumes
+		  }}
+	  />
     </div>
   );
 }
