@@ -2,9 +2,8 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 
 const Graph = ({datas}) => {
-	console.log("boo" + datas.timestamps);
 	return (
-		<div id='graph'>
+		<div className='graph'>
 			<Plot
 				data={[
 				  { // Main price graph
