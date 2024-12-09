@@ -21,26 +21,8 @@ app.get('/', async (req, res) => {
 })
 
 // Get a list of every item tradeable on the market, OSRSBox
-app.get('/ge-items', async (req, res) => {
+app.get('/ge-items', (req, res) => {
 	console.log('GET /ge-items/ request received.');
-	// Populates the list if it's empty.
-	if (tradeableItems.length <= 0) {
-		console.log("Populating list of items...");
-		const url = 'https://raw.githubusercontent.com/osrsbox/osrsbox-db/refs/heads/master/data/items/items-cache-data.json';
-		const data = await fetch(url);
-		const json = await data.json();
-		for (const [key, value] of Object.entries(json)) {
-			if (value.tradeable_on_ge) {
-				const item = {
-					id: value.id,
-					name: value.name,
-					ha: value.highalch
-				};
-				tradeableItems.push(item);
-			}
-		}
-		console.log("Done populating with " + tradeableItems.length + " items.");
-	}
 	res.status(200);
 	res.send(tradeableItems);
 });
@@ -85,6 +67,24 @@ app.get('/pricehistory/:name', (req, res) => {
 	});
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
 	console.log(`ExpressJS server listening on port ${PORT}`);
+	
+	if (tradeableItems.length <= 0) {
+		console.log("Populating list of items...");
+		const url = 'https://raw.githubusercontent.com/osrsbox/osrsbox-db/refs/heads/master/data/items/items-cache-data.json';
+		const data = await fetch(url);
+		const json = await data.json();
+		for (const [key, value] of Object.entries(json)) {
+			if (value.tradeable_on_ge) {
+				const item = {
+					id: value.id,
+					name: value.name,
+					ha: value.highalch
+				};
+				tradeableItems.push(item);
+			}
+		}
+		console.log("Done populating with " + tradeableItems.length + " items.");
+	}
 })
