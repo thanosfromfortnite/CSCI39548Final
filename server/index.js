@@ -27,12 +27,12 @@ app.get('/ge-items', (req, res) => {
 	res.send(tradeableItems);
 });
 
-// Get the 90 day history of an item by name, Weird Gloop
-app.get('/pricehistory/:name', (req, res) => {
-	const itemName = encodeURIComponent(req.params.name);
-	console.log('GET /pricehistory/:name request received.', itemName);
-	const url = 'https://api.weirdgloop.org/exchange/history/osrs/last90d?name=' + itemName + '&lang=en&compress=false';
-	console.log(url);
+// Get the 90 day history of an item by ID, Weird Gloop
+app.get('/pricehistory/:id', (req, res) => {
+	const itemId = encodeURIComponent(req.params.id);
+	const itemName = lookupId(itemId).name;
+	console.log('GET /pricehistory/:id request received.', itemId);
+	const url = 'https://api.weirdgloop.org/exchange/history/osrs/last90d?id=' + itemId + '&compress=false';
 	fetch(url)
 	.then(data => {
 		if (data.status == 200) {
@@ -44,20 +44,21 @@ app.get('/pricehistory/:name', (req, res) => {
 	.then(json => {
 		if (typeof (json.success) != 'undefined') {
 			res.status(400);
-			res.send("Invalid item name");
+			res.send("Invalid item ID");
 		}
 		else {
 			res.status(200);
 			let out = {
-				name: req.params.name,
+				name: itemName,
+				id: itemId,
 				timestamps: [],
 				prices: [],
 				volumes: []
 			};
-			for (let i = 0; i < json[req.params.name].length; i ++) {
-				out.timestamps.push(new Date(json[req.params.name][i].timestamp));
-				out.prices.push(json[req.params.name][i].price);
-				out.volumes.push(json[req.params.name][i].volume);
+			for (let i = 0; i < json[itemId].length; i ++) {
+				out.timestamps.push(new Date(json[itemId][i].timestamp));
+				out.prices.push(json[itemId][i].price);
+				out.volumes.push(json[itemId][i].volume);
 			}
 			res.send(out);
 		}
@@ -67,6 +68,29 @@ app.get('/pricehistory/:name', (req, res) => {
 	});
 });
 
+// Helper function to look up item name by ID.
+const lookupId = (itemId) => {
+	for (let i = 0; i < tradeableItems.length; i ++) {
+		if (tradeableItems[i].id + '' === itemId) {
+			return tradeableItems[i];
+		}
+	}
+	return '';
+};
+
+// Returns item information by ID.
+app.get('/item/:id', async (req, res) => {
+	const itemId = encodeURIComponent(req.params.id);
+	console.log('GET /item/:id request received.', itemId);
+	res.status(200);
+	const out = lookupId(itemId);
+	const response = await fetch('https://api.weirdgloop.org/exchange/history/osrs/latest?id=' + itemId);
+	const json = await response.json();
+	out.price = json[itemId].price;
+	res.send(out);
+});
+
+// Populate list with available items from the OSRSBox JSON API 
 app.listen(PORT, async () => {
 	console.log(`ExpressJS server listening on port ${PORT}`);
 	

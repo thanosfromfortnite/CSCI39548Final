@@ -2,14 +2,16 @@ import logo from './logo.svg';
 import './App.css';
 import React, {useEffect, useState} from 'react';
 import Graph from './components/Graph';
-import Search from './components/Search';
+import Item from './components/Item';
 
 function App() {
 	const [search, setSearch] = useState([]);
 	const [results, setResults] = useState([]);
 	const [graph, setGraph] = useState([]);
 	const [items, setItems] = useState([]);
-  
+	const [currentItem, setCurrentItem] = useState([]);
+	
+	// Populate list with available items
 	useEffect(() => {
 		fetch('http://localhost:3001/ge-items/')
 		.then((response) => {
@@ -31,51 +33,41 @@ function App() {
 		setSearch(e.target.value);
 	};
 	
-	const submitHandler = (e) => {
-		e.preventDefault();
-		fetch('http://localhost:3001/pricehistory/' + search)
-		.then((response) => {
-			return response.json();
-		})
-		.then((data) => {
-			setGraph(data);
-		})
-		.catch(e => console.error(e));
-	};
-	
-	const selectHandler = (e) => {
+	// When user selects an item from the live search results.
+	const selectHandler = async (e) => {
 		setSearch('');
-		fetch('http://localhost:3001/pricehistory/' + e.target.innerText)
-		.then((response) => {
-			return response.json();
-		})
-		.then((data) => {
-			setGraph(data);
-		})
-		.catch(e => console.error(e));
+		let response = await fetch('http://localhost:3001/item/' + e.target.id);
+		let data = await response.json();
+		setCurrentItem(data);
+		
+		response = await fetch('http://localhost:3001/pricehistory/' + e.target.id);
+		data = await response.json();
+		setGraph(data);
 	}
   
 	return (
 		<div className="App">
 			<div className='search'>
-				<form onSubmit={submitHandler}>
+				<form>
 					<input type='text' value={search} onChange={(e) => searchHandler(e)} placeholder='Search...' />
-					<input type='submit' />
 				</form>
 				<ul className='results'>
-					{results.slice(0, 5).map((e) => (
-						<li key={'result_' + e.id} className='result' name={e.name} onClick={(e) => selectHandler(e)}>{e.name}</li>
-					))}
+					{search.length > 0? results.slice(0, 5).map((e) => (
+						<li key={'result_' + e.id} id={e.id} className='result' name={e.name} onClick={(e) => selectHandler(e)}>{e.name}</li>
+					)) : <div></div>}
 				</ul>
 			</div>
 			
-		<Graph datas={{
-			name: graph.name,
-			timestamps: graph.timestamps,
-			prices: graph.prices,
-			volumes: graph.volumes
-		}}
-		/>
+			<Item props={
+				currentItem
+			}/>
+			
+			<Graph datas={{
+				name: graph.name,
+				timestamps: graph.timestamps,
+				prices: graph.prices,
+				volumes: graph.volumes
+			}}/>
 	   </div>
 	);
 }
