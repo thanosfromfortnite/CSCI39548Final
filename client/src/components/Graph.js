@@ -13,10 +13,12 @@ const Graph = ({datas}) => {
 				  }
 				]}
 				layout={{
+					paper_bgcolor: "rgba(192,168,134,1)",
+					plot_bgcolor: "rgba(226,219,200,1)",
 					width: 1000,
 					height: 540,
 					title: {text: 'Recent Prices for ' + datas.name},
-					xaxis: {title: {text: 'Date'}, tickmode: 'linear'},
+					xaxis: {title: {text: 'Date'}, tickmode: 'auto'},
 					yaxis: {title: {text: 'Price'}}
 				}}
 			/>
@@ -29,10 +31,12 @@ const Graph = ({datas}) => {
 				  }
 				]}
 				layout={{
+					paper_bgcolor: "rgba(192,168,134,1)",
+					plot_bgcolor: "rgba(226,219,200,1)",
 					width: 1000,
 					height: 300,
 					title: {text: 'Recent Trade Volume'},
-					xaxis: {tickmode: 'linear'}
+					xaxis: {tickmode: 'auto'}
 				}}
 			/>
 		</div>

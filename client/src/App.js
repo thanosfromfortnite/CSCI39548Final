@@ -35,6 +35,7 @@ function App() {
 	
 	// When user selects an item from the live search results.
 	const selectHandler = async (e) => {
+		console.log(e);
 		setSearch('');
 		let response = await fetch('http://localhost:3001/item/' + e.target.id);
 		let data = await response.json();
@@ -48,9 +49,7 @@ function App() {
 	return (
 		<div className="App">
 			<div className='search'>
-				<form>
-					<input type='text' value={search} onChange={(e) => searchHandler(e)} placeholder='Search...' />
-				</form>
+				<input value={search} onChange={(e) => searchHandler(e)} placeholder='Search...' />
 				<ul className='results'>
 					{search.length > 0? results.slice(0, 5).map((e) => (
 						<li key={'result_' + e.id} id={e.id} className='result' name={e.name} onClick={(e) => selectHandler(e)}>{e.name}</li>
