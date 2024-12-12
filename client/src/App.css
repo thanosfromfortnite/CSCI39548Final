@@ -1,6 +1,35 @@
 .App {
+	display: flex;
+	flex-direction: column;
   text-align: center;
+	justify-content: center;
   background-color: #C0A886;
+}
+
+.logo {
+	font-size: 48px;
+}
+
+.banner {
+	background-color: #E2DBC8;
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.search {
+	width: 25%;
+	display: flex;
+	text-align: center;
+	flex-direction: column;
+	margin:0 auto;
+}
+
+.result {
+	background-color: #B59A84;
+}
+
+.hover {
+	background-color: #726450;
 }
 
 .App-logo {

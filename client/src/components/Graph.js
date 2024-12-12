@@ -27,7 +27,7 @@ const Graph = ({datas}) => {
 				  { // Trade volume graph
 					x: datas.timestamps,
 					y: datas.volumes,
-					type: 'bar'
+					type: 'scatter'
 				  }
 				]}
 				layout={{

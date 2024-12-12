@@ -3,6 +3,7 @@ import './App.css';
 import React, {useEffect, useState} from 'react';
 import Graph from './components/Graph';
 import Item from './components/Item';
+import Banner from './components/Banner';
 
 function App() {
 	const [search, setSearch] = useState([]);
@@ -48,11 +49,14 @@ function App() {
   
 	return (
 		<div className="App">
+		
+			<Banner />
+			
 			<div className='search'>
 				<input value={search} onChange={(e) => searchHandler(e)} placeholder='Search...' />
 				<ul className='results'>
 					{search.length > 0? results.slice(0, 5).map((e) => (
-						<li key={'result_' + e.id} id={e.id} className='result' name={e.name} onClick={(e) => selectHandler(e)}>{e.name}</li>
+						<div key={'result_' + e.id} id={e.id} className='result' name={e.name} onClick={(e) => selectHandler(e)} onMouseEnter={(e) => {e.target.className = "result hover"}} onMouseLeave={(e) => {e.target.className = "result"}}>{e.name}</div>
 					)) : <div></div>}
 				</ul>
 			</div>
