@@ -30,6 +30,15 @@
 
 .hover {
 	background-color: #726450;
+	cursor: pointer;
+}
+
+.positive {
+	color: green;
+}
+
+.negative {
+	color: red;
 }
 
 .App-logo {

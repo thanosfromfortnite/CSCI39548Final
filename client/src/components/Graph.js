@@ -36,7 +36,8 @@ const Graph = ({datas}) => {
 					width: 1000,
 					height: 300,
 					title: {text: 'Recent Trade Volume'},
-					xaxis: {tickmode: 'auto'}
+					xaxis: {title: {text: 'Date'}, tickmode: 'auto'},
+					yaxis: {title: {text: 'Quantity of Item Traded'}}
 				}}
 			/>
 		</div>

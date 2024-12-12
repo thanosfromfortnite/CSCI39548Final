@@ -15,7 +15,7 @@ const Item = ({props}) => {
 			</div>
 			<div className='highalchemyprofit'>
 				Alchemy Profit: <span className='alchprofit'>
-					<span className='ha'>{typeof props.price != 'undefined' && typeof props.ha != 'undefined'? (props.ha - props.price).toLocaleString() : 0}</span> gp
+					<span className={typeof props.price != 'undefined' && typeof props.ha != undefined && props.ha - props.price >= 0? 'ha positive' : 'ha negative'}>{typeof props.price != 'undefined' && typeof props.ha != 'undefined'? (props.ha - props.price).toLocaleString() : 0}</span> gp
 				</span>
 			</div>
 		</div>
